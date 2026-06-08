@@ -24,6 +24,7 @@ public class CustomerController {
         //2. save customer
         //3. return saved customer
 
+
             return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customer));
 
         //ResponseEntity Types
@@ -37,14 +38,16 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<List<Customer>> getAll(){
         //GET -> 200 Ok
-        //ResonseEntity.status(HttpStatus.OK).body(customerService.getAll());
+        //ResponseEntity.status(HttpStatus.OK).body(customerService.getAll());
         return ResponseEntity.ok(customerService.getAll());
     }
+
     //http://localhost:8080/api/customers/1
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getById(@PathVariable int id){
             return ResponseEntity.ok(customerService.getById(id));
     }
+
     @PutMapping
     public ResponseEntity<Customer> update(@RequestBody Customer customer){
             return ResponseEntity.ok(customerService.update(customer));
@@ -59,6 +62,7 @@ public class CustomerController {
 
     /*
     http://localhost:8080/api/customers?id=1
+
     @DeleteMapping
     public ResponseEntity<?> deleteById(@RequestParam int id){}
      */
