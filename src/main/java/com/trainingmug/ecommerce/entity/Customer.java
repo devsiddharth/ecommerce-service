@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -30,5 +31,25 @@ public class Customer {
     private Status status; //Backend operation
     private LocalDateTime createdAt;
     private LocalDateTime lastLoggedInAt;
+
+    /*
+    This will set the relationship from Customer Table to address
+    and create address_id column in Customer table
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;*/
+
+
+    /*@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Address address;*/
+   /* @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Address> addresses;*/
+
+     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "customer_addresses",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    private List<Address> addresses;
 
 }
