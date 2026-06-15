@@ -1,5 +1,8 @@
 package com.trainingmug.ecommerce.controller;
 
+import com.trainingmug.ecommerce.dto.request.LoginRequestDto;
+import com.trainingmug.ecommerce.dto.request.SignupRequestDto;
+import com.trainingmug.ecommerce.dto.response.CustomerResponseDto;
 import com.trainingmug.ecommerce.entity.Customer;
 import com.trainingmug.ecommerce.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +21,14 @@ public class CustomerController {
 
     //CRUD operations (End Points)
     //Save ( POST -> body)
-    @PostMapping
-    public ResponseEntity<Customer> save(@RequestBody Customer customer) {
+    @PostMapping("/signup")
+    public ResponseEntity<CustomerResponseDto> signup(@RequestBody SignupRequestDto signupRequestDto) {
         //1. Throw CustomerExistsException if customer exists
         //2. save customer
         //3. return saved customer
 
+            return ResponseEntity.status(HttpStatus.CREATED).body(customerService.register(signupRequestDto));
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customer));
 
         //ResponseEntity Types
         /*
@@ -66,6 +69,11 @@ public class CustomerController {
     @DeleteMapping
     public ResponseEntity<?> deleteById(@RequestParam int id){}
      */
+
+    @PostMapping("/login")
+    public ResponseEntity<CustomerResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
+        return ResponseEntity.ok(customerService.login(loginRequestDto));
+    }
 
 
 }

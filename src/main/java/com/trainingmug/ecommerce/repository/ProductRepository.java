@@ -1,21 +1,14 @@
 package com.trainingmug.ecommerce.repository;
 
-import com.trainingmug.ecommerce.model.Product;
+import com.trainingmug.ecommerce.entity.Product;
 import org.springframework.stereotype.Repository;
-import com.trainingmug.ecommerce.util.CsvReader;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ProductRepository {
-    private final CsvReader csvReader;
-    private final List<Product> products;
-
-    public ProductRepository(CsvReader csvReader) throws IOException {
-        this.csvReader = csvReader;
-        this.products = this.csvReader.getProductsFromCsv();
-    }
+    private final List<Product> products = new ArrayList<>();
 
     public List<Product> findAll(){
         return products;
