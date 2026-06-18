@@ -7,6 +7,7 @@ import com.trainingmug.ecommerce.exception.CustomerExistsException;
 import com.trainingmug.ecommerce.exception.CustomerNotFoundException;
 import com.trainingmug.ecommerce.entity.Customer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CustomerService {
@@ -16,4 +17,12 @@ public interface CustomerService {
     List<Customer> getAll();
     void delete(int id) throws CustomerNotFoundException;
     CustomerResponseDto login(LoginRequestDto loginRequestDto) throws CustomerNotFoundException;
+    List<CustomerResponseDto> getCustomersCreatedBetween(
+            LocalDateTime start,
+            LocalDateTime end
+    );
+
+    List<CustomerResponseDto> searchCustomersByContainingName(String namePattern);
+
+    List<CustomerResponseDto> getCustomersByNameOrderByCreatedAtDesc(String name);
 }

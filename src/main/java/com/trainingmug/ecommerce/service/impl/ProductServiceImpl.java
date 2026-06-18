@@ -3,22 +3,18 @@ package com.trainingmug.ecommerce.service.impl;
 import com.trainingmug.ecommerce.entity.Product;
 import com.trainingmug.ecommerce.repository.ProductRepository;
 import com.trainingmug.ecommerce.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository){
-        this.productRepository = productRepository;
-    }
 
 //    @Override
 //    public List<Product> getAvailableProducts(boolean isAvailable) {
@@ -266,23 +262,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(int id) {
-        Product product = productRepository.findById(id);
-
-        if (product == null) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
-
-        return product;
+    public Optional<Product> getProductById(int id) {
+        return productRepository.findById(id);
     }
 
     @Override
     public Product updateProduct(int id, Product product) {
-        Product existingProduct = productRepository.findById(id);
-
-        if (existingProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 
         existingProduct.setName(product.getName());
         existingProduct.setCategory(product.getCategory());
@@ -290,18 +277,15 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setMaxRetailPrice(product.getMaxRetailPrice());
         existingProduct.setDiscountPercentage(product.getDiscountPercentage());
         existingProduct.setManufacturedYear(product.getManufacturedYear());
-        existingProduct.setAvailable(product.isAvailable());
+        existingProduct.setAvailable(product.getAvailable());
 
-        return existingProduct;
+        return productRepository.save(existingProduct);
     }
 
     @Override
     public void deleteProduct(int id) {
-        Product existingProduct = productRepository.findById(id);
-
-        if (existingProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 
         productRepository.deleteById(id);
     }

@@ -4,6 +4,7 @@ package com.trainingmug.ecommerce.service;
 
 import com.trainingmug.ecommerce.entity.Product;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,7 +98,7 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    Product getProductById(int id);
+    Optional<Product> getProductById(int id);
 
     Product updateProduct(int id, Product product);
 

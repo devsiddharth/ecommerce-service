@@ -44,12 +44,12 @@ public class Customer {
    /* @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> addresses;*/
 
-     @ManyToMany(cascade = CascadeType.ALL)
+    /* @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "customer_addresses",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id")
     )
-    private List<Address> addresses;
+    private List<Address> addresses;*/
 
 }

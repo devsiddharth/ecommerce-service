@@ -1,5 +1,6 @@
 package com.trainingmug.ecommerce.entity;
 
+import com.trainingmug.ecommerce.enums.Available;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,8 @@ public class Product {
     private String name;
     private int maxRetailPrice;
     private int discountPercentage;
-    private boolean isAvailable;
+    @Enumerated(EnumType.STRING)
+    private Available available;
     private String company;
     private String category;
     private int manufacturedYear;

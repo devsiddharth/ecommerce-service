@@ -66,7 +66,7 @@ public class CustomerRepository {
     Optional<Customer> findByEmail(String email);
     Optional<Customer> findDistinctByEmailAndPassword(String email, String password);
     List<Customer> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-    List<Customer> findByNameLike(String namePattern);
+    List<Customer> findByNameContaining(String name);
     List<Customer> findByNameOrderByCreatedAtDesc(String name);
 
 

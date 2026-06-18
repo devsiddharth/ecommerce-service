@@ -25,6 +25,6 @@ public class Address {
     @JoinColumn(name = "customer_id")
     private Customer customer;*/
 
-    @ManyToMany(mappedBy = "addresses")
-    private List<Customer> customers;
+    /*@ManyToMany(mappedBy = "addresses")
+    private List<Customer> customers;*/
 }

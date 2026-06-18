@@ -5,16 +5,20 @@ import com.trainingmug.ecommerce.dto.request.SignupRequestDto;
 import com.trainingmug.ecommerce.dto.response.CustomerResponseDto;
 import com.trainingmug.ecommerce.entity.Customer;
 import com.trainingmug.ecommerce.service.CustomerService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 @RestController
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor
+
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -75,5 +79,19 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.login(loginRequestDto));
     }
 
+    @GetMapping("/created-between/{start}/{end}")
+    public ResponseEntity<List<CustomerResponseDto>> getCustomersCreatedBetween(@PathVariable LocalDateTime start, @PathVariable LocalDateTime end){
+        return ResponseEntity.ok(customerService.getCustomersCreatedBetween(start, end));
+    }
+
+    @GetMapping("/search-key-name/{name}")
+    public ResponseEntity<List<CustomerResponseDto>> getCustomersByContainingName(@PathVariable String name){
+        return ResponseEntity.ok(customerService.searchCustomersByContainingName(name));
+    }
+
+    @GetMapping("/search-names-created-order-descending/{name}")
+    public ResponseEntity<List<CustomerResponseDto>> getCustomersByNameOrderByCreatedAtDesc(@PathVariable String name){
+        return ResponseEntity.ok(customerService.getCustomersByNameOrderByCreatedAtDesc(name));
+    }
 
 }

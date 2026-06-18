@@ -11,6 +11,7 @@ import com.trainingmug.ecommerce.entity.Customer;
 import com.trainingmug.ecommerce.repository.AddressRepository;
 import com.trainingmug.ecommerce.repository.CustomerRepository;
 import com.trainingmug.ecommerce.service.CustomerService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,9 +19,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Builder
+
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -28,26 +32,28 @@ public class CustomerServiceImpl implements CustomerService {
     private final AddressRepository addressRepository;
     @Override
     public CustomerResponseDto register(SignupRequestDto signupRequestDto) throws CustomerExistsException {
-        customerRepository.findByEmail(signupRequestDto.getEmail()).ifPresent(c -> {
-            throw new CustomerExistsException("Customer exists with email: " + signupRequestDto.getName() );
-        });
+        customerRepository.findByEmail(signupRequestDto.getEmail()).ifPresent(c -> new CustomerExistsException("Customer exists with email: " + signupRequestDto.getName() ));
 
-//        Customer customer = Customer.builder()
+        //        Customer customer = Customer.builder()
 //                .name(signupRequestDto.getName())
 //                .email(signupRequestDto.getEmail())
 //                .password(signupRequestDto.getPassword())
 //                .phone(signupRequestDto.getPhone())
 //                .gender(signupRequestDto.getGender())
 //                .build();
+
         Customer customer = modelMapper.map(signupRequestDto, Customer.class);
+
         //Customer Entity
+
         customer.setStatus(Status.ACTIVE);
         customer.setCreatedAt(LocalDateTime.now());
         customer.setLastLoggedInAt(LocalDateTime.now());
+
        // customer.getAddress().setCustomer(customer);
       //  customer.getAddresses().forEach(address -> address.setCustomer(customer));
 
-        List<Address> addresses =
+        /*List<Address> addresses =
                 customer.getAddresses()
                         .stream()
                         .map(address -> {
@@ -73,6 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(savedCustomer.getEmail())
                 .status(savedCustomer.getStatus())
                 .build();*/
+
         return modelMapper.map(customerRepository.save(customer), CustomerResponseDto.class);
     }
 
@@ -112,4 +119,29 @@ public class CustomerServiceImpl implements CustomerService {
         return modelMapper.map(customerRepository.findDistinctByEmailAndPassword(loginRequestDto.getEmail(), loginRequestDto.getPassword()).orElseThrow(() -> new CustomerNotFoundException("Customer not found with email: " + loginRequestDto.getEmail())), CustomerResponseDto.class);
 
      }
+
+    @Override
+    public List<CustomerResponseDto> getCustomersCreatedBetween(LocalDateTime start, LocalDateTime end) {
+
+        return customerRepository.findByCreatedAtBetween(start,end)
+                .stream()
+                .map(c-> modelMapper.map(c, CustomerResponseDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<CustomerResponseDto> searchCustomersByContainingName(String name) {
+        return customerRepository.findByNameContaining(name)
+                .stream()
+                .map(customer -> modelMapper.map(customer, CustomerResponseDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<CustomerResponseDto> getCustomersByNameOrderByCreatedAtDesc(String name) {
+        return customerRepository.findByNameOrderByCreatedAtDesc(name)
+                .stream()
+                .map(customer -> modelMapper.map(customer, CustomerResponseDto.class))
+                .toList();
+    }
 }
